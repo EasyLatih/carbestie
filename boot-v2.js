@@ -5,8 +5,15 @@ function render(){
   Promise.resolve(fn()).catch(e=>{console.error(e);toast('Something went wrong')});
 }
 
-const v3=document.createElement('script');
-v3.src='optimize-v3.js';
-v3.onload=()=>boot();
-v3.onerror=()=>boot();
-document.body.appendChild(v3);
+function loadBootScript(src){
+  return new Promise(resolve=>{
+    const s=document.createElement('script');s.src=src;
+    s.onload=resolve;s.onerror=resolve;document.body.appendChild(s);
+  });
+}
+
+(async()=>{
+  await loadBootScript('optimize-v3.js');
+  await loadBootScript('google-auth-v6.js');
+  boot();
+})();
